@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import ReactMapGL, { Marker } from 'react-map-gl';
 import { Container, Tooltip } from './styles';
 import 'mapbox-gl/dist/mapbox-gl.css';
+
+import Cluster from '../Cluster/Cluster';
 import Pin from './Pin';
+
 
 
 
@@ -20,7 +23,7 @@ import {
     injectDensityProperties,
     injectRelativeDensityByTypeProperties,
     injectIndexNaturaUltra,
-    updatePercentiles,    
+    updatePercentiles,
 } from '../../utils/neighborhood';
 
 import { fetchMarkers, fetchMarkersByNeighborhood } from '../../stores/actions/markersActions';
@@ -29,7 +32,9 @@ const MAPBOX_API_KEY = 'pk.eyJ1IjoiZnNzYW50b3MiLCJhIjoiY2pvYnRpbG03MjZkNTNxcGFmZ
 
 export class Map extends Component {
 
+
     state = {
+        map: null,
         mapStyle: defaultMapStyle,
         viewport: {
             width: '90%',
@@ -48,7 +53,7 @@ export class Map extends Component {
 
     componentDidMount = async () => {
 
-        const typeOfSearch = 'RELATIVE_DENSITY_BY_POPULATION';
+        const typeOfSearch = '';
 
         switch (typeOfSearch) {
             case 'MARKERS': {
@@ -78,7 +83,7 @@ export class Map extends Component {
                 this.loadGeoJson(injectedGeoJson);
                 break;
             }
-                case 'INDEX_NATURA_ULTRA': {
+            case 'INDEX_NATURA_ULTRA': {
                 await this.props.fetchMarkersByNeighborhood('DENSITY')
                 const injectedGeoJson = injectIndexNaturaUltra(this.props.markersByNeighborhood, data);
                 updatePercentiles(injectedGeoJson, f => f.properties.density[this.state.densityFilter]);
@@ -124,16 +129,51 @@ export class Map extends Component {
 
 
     render() {
-        const { mapStyle } = this.state;
+        const { mapStyle, map } = this.state;
         const { markers } = this.props;
         return (
             <Container>
                 <ReactMapGL
                     {...this.state.viewport}
+                    ref={ref => (this.mapRef = ref)}
+                    onLoad={() => this.setState({ map: this.mapRef.getMap() })}
                     onViewportChange={(viewport) => this.setState({ viewport })}
                     mapboxApiAccessToken={MAPBOX_API_KEY}
                     mapStyle={mapStyle}
-                    onHover={this._onHover}>
+                    onHover={this._onHover}
+                >
+                    {map &&
+                        (<Cluster
+                            map={map}
+                            radius={20}
+                            extent={512}
+                            nodeSize={40}
+                        /*                             element={clusterProps => (
+                                                        <PinGroup onViewportChange={(viewport) => this.setState({ viewport })} {...clusterProps} />
+                                                    )} */
+                        >
+                            <Marker
+                                key={1}
+                                longitude={-51.2177}
+                                latitude={-30.0346}
+
+                            >
+                                <Pin color={
+                                    'red'
+                                }
+                                    size={10} />
+                            </Marker>
+                            {/* every item should has a 
+            uniqe key other wise cluster will not rerender on change */}
+                            {/* points.map((point, i) => (
+
+            )) */}
+                        </Cluster>
+                        )}
+
+
+
+
                     {/*                     {
                         markers.map((e, i) => {
                             return (
@@ -149,7 +189,7 @@ export class Map extends Component {
                                 </Marker>)
                         })
                     } */}
-                    {this._renderTooltip()}
+                    {/*                     {this._renderTooltip()} */}
                 </ReactMapGL>
 
 
