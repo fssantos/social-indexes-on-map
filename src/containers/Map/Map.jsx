@@ -6,6 +6,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import Cluster from '../Cluster/Cluster';
 import Pin from './Pin';
+import { PinGroup } from 'supercluster';
 
 
 
@@ -37,13 +38,14 @@ export class Map extends Component {
         map: null,
         mapStyle: defaultMapStyle,
         viewport: {
-            width: '90%',
-            height: 500,
+            width: '35%',
+            height: 300,
             latitude: -30.0346,
             longitude: -51.2177,
             zoom: 12
         },
-        densityFilter: 'avgOfNATURA',
+        markerFilter: 'NATURA',
+        densityFilter: 'indexNaturaUltra',
         geoJson: null,
         hoveredFeature: null,
         showingInfoWindow: false,
@@ -53,11 +55,12 @@ export class Map extends Component {
 
     componentDidMount = async () => {
 
-        const typeOfSearch = '';
+        this.props.fetchMarkers();
+        const typeOfSearch = 'INDEX_NATURA_ULTRA';
 
         switch (typeOfSearch) {
             case 'MARKERS': {
-                //this.props.fetchMarkers();
+
                 break;
 
 
@@ -129,7 +132,7 @@ export class Map extends Component {
 
 
     render() {
-        const { mapStyle, map } = this.state;
+        const { mapStyle, map, markerFilter } = this.state;
         const { markers } = this.props;
         return (
             <Container>
@@ -145,50 +148,26 @@ export class Map extends Component {
                     {map &&
                         (<Cluster
                             map={map}
-                            radius={20}
+                            maxZoom={14}
+                            radius={50}
                             extent={512}
                             nodeSize={40}
-                        /*                             element={clusterProps => (
-                                                        <PinGroup onViewportChange={(viewport) => this.setState({ viewport })} {...clusterProps} />
-                                                    )} */
+                            element={clusterProps => (
+                                <Pin color={'green'} onViewportChange={(viewport) => this.setState({ viewport })} {...clusterProps} />
+                            )}
                         >
-                            <Marker
-                                key={1}
-                                longitude={-51.2177}
-                                latitude={-30.0346}
 
-                            >
-                                <Pin color={
-                                    'red'
-                                }
-                                    size={10} />
-                            </Marker>
-                            {/* every item should has a 
-            uniqe key other wise cluster will not rerender on change */}
-                            {/* points.map((point, i) => (
-
-            )) */}
+                            {
+                                markers.map((e, i) => {
+                                    return (
+                                        <Marker key={i} latitude={parseFloat(e.lng)} longitude={parseFloat(e.lat)}
+                                        >
+                                        </Marker>)
+                                })
+                            }
                         </Cluster>
                         )}
 
-
-
-
-                    {/*                     {
-                        markers.map((e, i) => {
-                            return (
-                                <Marker key={i} latitude={parseFloat(e.lng)} longitude={parseFloat(e.lat)}
-                                >
-                                    <Pin color={
-                                        e.type === 'ULTRA' ? 'red'
-                                            : e.type === 'MIX' ? 'yellow'
-                                                : e.type === 'NATURA' ? 'gren' :
-                                                    'black'
-                                    }
-                                        size={10} />
-                                </Marker>)
-                        })
-                    } */}
                     {/*                     {this._renderTooltip()} */}
                 </ReactMapGL>
 
@@ -279,9 +258,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(Map);
                                 <Marker key={i} latitude={parseFloat(e.lng)} longitude={parseFloat(e.lat)}
                                 >
                                     <Pin color={
-                                        e.type === 'ULTRA' ? 'red'
-                                            : e.type === 'MIX' ? 'yellow'
-                                                : e.type === 'NATURA' ? 'gren' :
+                                        markerFilter === 'ULTRA' ? 'red'
+                                            : markerFilter === 'MIX' ? 'yellow'
+                                                : markerFilter === 'NATURA' ? 'gren' :
                                                     'black'
                                     }
                                         size={10} />

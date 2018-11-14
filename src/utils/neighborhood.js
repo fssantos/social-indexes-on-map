@@ -53,9 +53,9 @@ export const injectIndexNaturaUltra = (propsArray, geoJsonData) => {
                 ...e.properties,
                 density: {
                     indexNaturaUltra:
-                    propsArray[i].ULTRA===0 || propsArray[i].NATURA===0 ? 0
-                    :propsArray[i].ULTRA===null || propsArray[i].NATURA===null ? 0
-                    : propsArray[i].NATURA/propsArray[i].ULTRA,
+                        propsArray[i].ULTRA === 0 || propsArray[i].NATURA === 0 ? 0
+                            : propsArray[i].ULTRA === null || propsArray[i].NATURA === null ? 0
+                                : propsArray[i].NATURA / propsArray[i].ULTRA,
 
                 }
 

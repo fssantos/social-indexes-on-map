@@ -16,13 +16,16 @@ export default class Pin extends PureComponent {
         const { size = 20, color } = this.props;
 
         return (
-            <svg
-                height={size}
-                viewBox="0 0 24 24"
-                style={{ ...pinStyle, fill: color, transform: `translate(${-size / 2}px,${-size}px)` }}
-            >
-                <path d={ICON} />
-            </svg>
+            <div>
+                <p>{this.props.cluster.properties.point_count}</p>
+                {/*                 <svg
+                    height={size}
+                    viewBox="0 0 24 24"
+                    style={{ ...pinStyle, fill: color, transform: `translate(${-size / 2}px,${-size}px)` }}
+                >
+                    <path d={ICON} />
+                </svg> */}
+            </div>
         );
     }
 }
