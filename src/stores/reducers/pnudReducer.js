@@ -1,24 +1,18 @@
-import { REQUEST_WIDGETS, RECEIVE_WIDGETS } from "../actions/widgetActions";
+import { REQUEST_PNUD_DATA, RECEIVE_PNUD_DATA_BY_FIELD } from "../actions/pnudActions";
 
 const initialState = {
-    data: {
-        newOrders: 120,
-        comments: 52,
-        newUsers: 24,
-        pageViews: 25200,
-    },
-    isFetching: false,
+    data: [],
 };
 
 function reducer(state = initialState, action) {
     switch (action.type) {
-        case REQUEST_WIDGETS:
+        case REQUEST_PNUD_DATA:
             return {
                 ...state,
                 isFetching: true,
 
             }
-        case RECEIVE_WIDGETS:
+        case RECEIVE_PNUD_DATA_BY_FIELD:
             return {
                 ...state,
                 data: action.payload.data,
@@ -30,4 +24,4 @@ function reducer(state = initialState, action) {
     }
 }
 
-module.exports = reducer;
+export default reducer;

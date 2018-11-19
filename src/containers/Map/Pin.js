@@ -1,8 +1,14 @@
 import React, { PureComponent } from 'react';
+import { scaleLinear } from 'd3-scale';
 
-const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
-  c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
-  C20.1,15.8,20.2,15.8,20.2,15.7z`;
+import { Circle } from './styles';
+
+const ICON = `
+M 100, 100
+m -75, 0
+a 75,75 0 1,0 150,0
+a 75,75 0 1,0 -150,0
+`;
 
 const pinStyle = {
     fill: '#d00',
@@ -10,22 +16,41 @@ const pinStyle = {
 
 };
 
+
+
 export default class Pin extends PureComponent {
 
+    calculateColor = (totalN, n) => {
+
+        console.log(totalN);
+
+        const color = scaleLinear()
+            .domain([0, totalN / 2, totalN])
+            .range(["#51bbd6", "#f1f075", "#f28cb1"]);
+
+        return color(n);
+    }
+
+    calculateRadius = (totalN, n) => {
+
+        console.log(totalN);
+
+        const radius = scaleLinear()
+            .domain([0, totalN / 2, totalN])
+            .range(['50px', '75px', '100px']);
+
+        return radius(n);
+    }
+
     render() {
-        const { size = 20, color } = this.props;
+        const color = this.calculateColor(this.props.totalN, this.props.cluster.properties.point_count);
+        const size = this.calculateRadius(this.props.totalN, this.props.cluster.properties.point_count);
 
         return (
-            <div>
-                <p>{this.props.cluster.properties.point_count}</p>
-                {/*                 <svg
-                    height={size}
-                    viewBox="0 0 24 24"
-                    style={{ ...pinStyle, fill: color, transform: `translate(${-size / 2}px,${-size}px)` }}
-                >
-                    <path d={ICON} />
-                </svg> */}
-            </div>
+            <Circle style={{ width: size, height: size, backgroundColor: color }}>
+
+                <p style={{ color: 'white' }}>{this.props.cluster.properties.point_count}</p>
+            </Circle>
         );
     }
 }

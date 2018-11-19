@@ -8,28 +8,23 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import Header from './component/Header/Header';
 import Map from './containers/Map/Map';
+import ToolBar from './containers/ToolBar/ToolBar';
 
 
 const store = configureStore();
 
 
 class App extends Component {
-
-  state = {
-    viewport: {
-      width: '90%',
-      height: 500,
-      latitude: 37.7577,
-      longitude: -122.4376,
-      zoom: 8
-    }
-  }
   render() {
     return (
       <Provider store={store}>
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <Header />
-          <Map />
+          <div style={{ display: 'flex', alignSelf: 'flex-start' }}>
+            <ToolBar />
+            <Map/>
+
+          </div>
         </div>
       </Provider>
     );

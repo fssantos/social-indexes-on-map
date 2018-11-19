@@ -69,10 +69,25 @@ export const injectIndexNaturaUltra = (propsArray, geoJsonData) => {
     };
 }
 
+export const injectPnudFieldProperties = (field, propsArray, geoJsonData) => {
+    const features = geoJsonData.features.map((e, i) => {
+        return {
+            ...e,
+            properties: {
+                ...e.properties,
+                field: {
+                    [field]: propsArray[i][field],
+                }
 
+            }
+        }
 
-
-
+    })
+    return {
+        type: 'FeatureCollection',
+        features
+    };
+}
 
 export function updatePercentiles(featureCollection, accessor) {
     const { features } = featureCollection;

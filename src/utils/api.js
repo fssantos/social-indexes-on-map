@@ -1,12 +1,10 @@
 import "whatwg-fetch";
-const apiUrl = "http://localhost:3001";
+const apiUrl = "http://192.168.15.8:3001";
 
 
 const resource = {
-    widgets: "widgets",
-    chatMessages: "messages",
-    pageViews: "pageViews",
-    markers: "marker"
+    markers: "marker",
+    pnud: 'pnud'
 }
 
 
@@ -33,6 +31,9 @@ export const listMarkers = () =>
 
 export const listMarkersByNeighborhood = (type) =>
     searchList(resource.markers, type).then(response => response.json())
+
+export const listPnudDataByField = (field) =>
+    searchList(resource.pnud, field).then(response => response.json())
 
 // Commum methods
 const fetchList = resource =>

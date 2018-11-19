@@ -10,6 +10,16 @@ export const Container = styled.div`
     height: 500px;
 `;
 
+export const Circle = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    background-color: red;   
+`;
+
 export const Tooltip = styled.div`
   position: absolute;
   margin: 8px;
